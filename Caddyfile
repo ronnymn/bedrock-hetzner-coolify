@@ -1,0 +1,53 @@
+# Caddyfile for Bedrock WordPress on FrankenWP
+# Coolify/Traefik handles TLS termination — we listen on plain HTTP inside the container
+
+{
+    # Disable auto-HTTPS — Coolify's Traefik handles certs
+    auto_https off
+    admin off
+}
+
+:80 {
+    # Bedrock document root is web/, not the project root
+    root * /var/www/html/web
+
+    # Enable FrankenPHP worker mode for WordPress
+    # Keeps PHP bootstrapped in memory between requests
+    frankenphp {
+        worker {
+            file /var/www/html/web/index.php
+            num 4
+        }
+    }
+
+    # Serve static files directly — skip PHP for anything that exists on disk
+    @static {
+        file
+        not path /wp-admin/*
+    }
+    route @static {
+        file_server
+    }
+
+    # Block direct access to sensitive Bedrock files
+    @blocked {
+        path /.env
+        path /.env.*
+        path /composer.json
+        path /composer.lock
+        path /config/*
+        path /vendor/*
+        path /web/wp/wp-config.php
+    }
+    respond @blocked 403
+
+    # WordPress pretty permalinks — pass everything else to PHP
+    @wordpress {
+        not file
+        path_regexp ^(.+\.php)?$
+    }
+    rewrite @wordpress /index.php?{query}
+
+    # PHP handler
+    php_server
+}

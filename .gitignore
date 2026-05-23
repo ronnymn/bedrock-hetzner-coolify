@@ -1,0 +1,26 @@
+# Bedrock
+.env
+.env.*
+!.env.example
+
+# WordPress core — managed by Composer, never committed
+web/wp/
+
+# Vendor — installed by Composer on deploy
+vendor/
+
+# Uploads — stored in Bunny.net, never committed
+web/app/uploads/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
