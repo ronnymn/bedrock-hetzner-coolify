@@ -17,8 +17,6 @@ COPY . .
 RUN composer dump-autoload --optimize --no-dev
 
 # ─── Stage 2: FrankenPHP production image ────────────────────────────────────
-# Official FrankenPHP image — PHP + Caddy in one
-# https://frankenphp.dev
 FROM dunglas/frankenphp:latest
 
 WORKDIR /var/www/html
@@ -59,5 +57,5 @@ ENV SERVER_NAME=":80"
 
 EXPOSE 80
 
-# Override the default Caddyfile with our Bedrock-specific one
-COPY Caddyfile /etc/caddy/Caddyfile
+# Copy our custom Caddyfile (renamed to avoid Coolify detecting it as a Caddy app)
+COPY frankenphp.Caddyfile /etc/caddy/Caddyfile
