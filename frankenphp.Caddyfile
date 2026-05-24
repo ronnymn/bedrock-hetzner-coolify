@@ -1,17 +1,14 @@
-# Caddyfile for Bedrock WordPress on FrankenPHP
-
 {
-    auto_https off
-    admin off
-    frankenphp
+	auto_https off
+	admin off
+	frankenphp
 }
 
 :80 {
-    root * /var/www/html/web
+	root * /var/www/html/web
 
-    # WordPress pretty permalinks
-    try_files {path} {path}/ /index.php?{query}
+	# WordPress pretty permalinks
+	try_files {path} {path}/ /index.php?{query}
 
-    # Execute PHP files
-    php_server
+	php_server
 }

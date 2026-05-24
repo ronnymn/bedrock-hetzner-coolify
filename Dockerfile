@@ -62,7 +62,7 @@ EXPOSE 80
 
 # Health check required by Coolify — curl runs inside the container
 HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
-    CMD curl -f http://localhost/ || exit 1
+    CMD curl -f http://localhost/health.php || exit 1
 
 # Copy our custom Caddyfile to FrankenPHP's expected location
 COPY frankenphp.Caddyfile /etc/frankenphp/Caddyfile
