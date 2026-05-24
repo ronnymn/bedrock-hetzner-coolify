@@ -21,6 +21,31 @@ Config::define('DB_CHARSET',  'utf8mb4');
 Config::define('DB_COLLATE',  '');
 $table_prefix = env('DB_PREFIX') ?: 'wp_';
 
+// ─── DEBUG: log the DB connection attempt ────────────────────────────────────
+$debug_log = '/tmp/db-debug.log';
+$debug_msg = sprintf(
+    "[%s] DB_HOST=%s DB_USER=%s DB_NAME=%s DB_PASSWORD_LEN=%d\n",
+    date('c'),
+    env('DB_HOST') ?: 'mysql',
+    env('DB_USER'),
+    env('DB_NAME'),
+    strlen((string) env('DB_PASSWORD'))
+);
+
+$mysqli = @new mysqli(
+    env('DB_HOST') ?: 'mysql',
+    env('DB_USER'),
+    env('DB_PASSWORD'),
+    env('DB_NAME')
+);
+if ($mysqli->connect_error) {
+    $debug_msg .= "  CONNECT_ERROR: " . $mysqli->connect_error . "\n";
+} else {
+    $debug_msg .= "  CONNECT_OK\n";
+}
+file_put_contents($debug_log, $debug_msg, FILE_APPEND);
+error_log($debug_msg);
+
 // ─── URLs ────────────────────────────────────────────────────────────────────
 Config::define('WP_HOME',    env('WP_HOME'));
 Config::define('WP_SITEURL', env('WP_SITEURL') ?: env('WP_HOME') . '/wp');
@@ -33,7 +58,6 @@ $is_staging     = WP_ENV === 'staging';
 $is_development = WP_ENV === 'development';
 
 // ─── Auth Keys & Salts ───────────────────────────────────────────────────────
-// Generate at: https://roots.io/salts
 Config::define('AUTH_KEY',         env('AUTH_KEY'));
 Config::define('SECURE_AUTH_KEY',  env('SECURE_AUTH_KEY'));
 Config::define('LOGGED_IN_KEY',    env('LOGGED_IN_KEY'));
@@ -48,9 +72,7 @@ Config::define('S3_UPLOADS_BUCKET',     env('S3_UPLOADS_BUCKET'));
 Config::define('S3_UPLOADS_REGION',     env('S3_UPLOADS_REGION')   ?: 'eu-central-1');
 Config::define('S3_UPLOADS_KEY',        env('S3_UPLOADS_KEY'));
 Config::define('S3_UPLOADS_SECRET',     env('S3_UPLOADS_SECRET'));
-// Bunny.net storage endpoint — Falkenstein primary, Johannesburg replica
 Config::define('S3_UPLOADS_ENDPOINT',   env('S3_UPLOADS_ENDPOINT') ?: 'https://storage.bunnycdn.com');
-// CDN Pull Zone URL — media served from here to end users
 Config::define('S3_UPLOADS_BUCKET_URL', env('S3_UPLOADS_BUCKET_URL'));
 
 // ─── Redis Object Cache ───────────────────────────────────────────────────────
@@ -75,15 +97,11 @@ Config::define('DISALLOW_FILE_MODS',    $is_production);
 Config::define('FORCE_SSL_ADMIN',       $is_production);
 Config::define('WP_AUTO_UPDATE_CORE',   $is_development ? true : 'minor');
 
-// ─── Debug ────────────────────────────────────────────────────────────────────
-Config::define('WP_DEBUG',         $is_development);
-Config::define('WP_DEBUG_LOG',     $is_development);
-Config::define('WP_DEBUG_DISPLAY', $is_development);
-Config::define('SCRIPT_DEBUG',     $is_development);
-
-if ($is_production || $is_staging) {
-    ini_set('display_errors', '0');
-}
+// ─── Debug — TEMPORARILY ON ──────────────────────────────────────────────────
+Config::define('WP_DEBUG',         true);
+Config::define('WP_DEBUG_LOG',     true);
+Config::define('WP_DEBUG_DISPLAY', true);
+Config::define('SCRIPT_DEBUG',     true);
 
 // ─── Limits ───────────────────────────────────────────────────────────────────
 Config::define('WP_MEMORY_LIMIT',     '256M');
@@ -91,7 +109,6 @@ Config::define('WP_MAX_MEMORY_LIMIT', '512M');
 
 Config::apply();
 
-/** Absolute path to the WordPress directory */
 if (!defined('ABSPATH')) {
     define('ABSPATH', dirname(__DIR__) . '/web/wp/');
 }
