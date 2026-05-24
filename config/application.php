@@ -10,6 +10,13 @@ use function Env\env;
 $root_dir    = dirname(__DIR__);
 $webroot_dir = $root_dir . '/web';
 
+// ─── Reverse proxy: trust X-Forwarded-Proto from Coolify/Traefik ─────────────
+// Traefik terminates TLS and forwards as HTTP; without this WP loops trying
+// to upgrade wp-admin to HTTPS.
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+}
+
 // ─── URLs ────────────────────────────────────────────────────────────────────
 Config::define('WP_HOME',    env('WP_HOME'));
 Config::define('WP_SITEURL', env('WP_SITEURL') ?: env('WP_HOME') . '/wp');
