@@ -57,5 +57,5 @@ ENV SERVER_NAME=":80"
 
 EXPOSE 80
 
-# Copy our custom Caddyfile (renamed to avoid Coolify detecting it as a Caddy app)
-COPY frankenphp.Caddyfile /etc/caddy/Caddyfile
+# Copy our custom Caddyfile to FrankenPHP's expected location
+COPY frankenphp.Caddyfile /etc/frankenphp/Caddyfile
