@@ -4,7 +4,7 @@
 	frankenphp
 }
 
-0.0.0.0:80 {
+:80 {
 	root * /var/www/html/web
 
 	# WordPress pretty permalinks
