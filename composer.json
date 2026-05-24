@@ -32,7 +32,8 @@
     "roots/wp-password-bcrypt": "^1.1.0",
     "wpackagist-plugin/redis-cache": "^2.5",
     "wpackagist-plugin/autoptimize": "^3.1",
-    "wpackagist-plugin/wp-fastest-cache": "^1.2"
+    "wpackagist-plugin/wp-fastest-cache": "^1.2",
+    "wpackagist-theme/twentytwentyfive": "^1.5"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",

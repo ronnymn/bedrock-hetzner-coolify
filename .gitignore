@@ -9,9 +9,13 @@ web/wp/
 # Vendor — installed by Composer on deploy
 vendor/
 
-# Composer-managed plugins and mu-plugins — never committed
+# Composer-managed plugins and mu-plugins — never committed.
+# Exception: our own hand-written mu-plugins (prefixed `0`) ARE tracked.
+# The leading `!web/app/mu-plugins/` re-includes the dir so the more
+# specific `!.../0*.php` pattern below it can take effect.
 web/app/plugins/
-web/app/mu-plugins/
+web/app/mu-plugins/*
+!web/app/mu-plugins/0*.php
 
 # Uploads — stored in Bunny.net, never committed
 web/app/uploads/
