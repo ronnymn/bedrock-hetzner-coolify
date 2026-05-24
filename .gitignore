@@ -9,6 +9,10 @@ web/wp/
 # Vendor — installed by Composer on deploy
 vendor/
 
+# Composer-managed plugins and mu-plugins — never committed
+web/app/plugins/
+web/app/mu-plugins/
+
 # Uploads — stored in Bunny.net, never committed
 web/app/uploads/
 

@@ -55,8 +55,6 @@ RUN { \
 # Copy Bedrock app from deps stage
 COPY --from=deps --chown=www-data:www-data /app /var/www/html
 
-# Tell FrankenPHP that Bedrock's document root is web/
-ENV FRANKENPHP_CONFIG="worker ./web/index.php"
 ENV SERVER_NAME=":80"
 
 EXPOSE 80
