@@ -37,6 +37,16 @@ docker build -t bedrock-starter .
 docker run -p 8080:80 --env-file .env bedrock-starter
 ```
 
+## Coolify deployments: don't double-trigger
+
+This app is wired up to Coolify via its GitHub App, so Coolify deploys
+automatically on `git push` via webhook. **Do not** also call the deploy
+API (`POST /api/v1/deploy?uuid=...&force=true`) right after pushing —
+the API deploy and the webhook deploy run in parallel and tear down the
+just-running containers mid-rebuild. After pushing, just watch the
+deployment via API/dashboard. Only call the deploy API when there's no
+code change (env-var change, force rebuild, settings change).
+
 ## Architecture
 
 ### Directory layout (Bedrock convention)
