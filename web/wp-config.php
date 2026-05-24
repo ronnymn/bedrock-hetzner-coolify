@@ -2,42 +2,21 @@
 /**
  * Bedrock — Config bootstrapper
  *
- * Bedrock requires its custom wp-config.php here in web/ which loads
- * config/application.php through the autoloader.
+ * WP's wp-load.php defines ABSPATH before requiring this file, so the
+ * config-loading block must NOT be wrapped in `if (!defined('ABSPATH'))` —
+ * doing so silently skips the entire Bedrock config, leaving WP with no
+ * DB credentials.
  */
 
-if (!defined('ABSPATH')) {
-    /**
-     * Directory containing all of the site's files
-     *
-     * @var string
-     */
-    $root_dir = dirname(__DIR__);
+$root_dir = dirname(__DIR__);
 
-    /**
-     * Document Root
-     *
-     * @var string
-     */
-    $webroot_dir = $root_dir . '/web';
+require_once $root_dir . '/vendor/autoload.php';
 
-    /**
-     * Load Composer autoloader
-     */
-    require_once $root_dir . '/vendor/autoload.php';
-
-    /**
-     * Load environment variables from .env
-     */
-    if (file_exists($root_dir . '/.env')) {
-        $dotenv = Dotenv\Dotenv::createUnsafeImmutable($root_dir);
-        $dotenv->load();
-    }
-
-    /**
-     * Load Bedrock application config
-     */
-    require_once $root_dir . '/config/application.php';
+if (file_exists($root_dir . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createUnsafeImmutable($root_dir);
+    $dotenv->load();
 }
+
+require_once $root_dir . '/config/application.php';
 
 require_once ABSPATH . 'wp-settings.php';
