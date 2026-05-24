@@ -21,7 +21,6 @@ FROM dunglas/frankenphp:latest
 
 WORKDIR /var/www/html
 
-# Install curl (needed for Coolify health checks) and PHP extensions
 RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*
 
 RUN install-php-extensions \
@@ -60,6 +59,10 @@ ENV SERVER_NAME=":80"
 ENV SERVER_ROOT="/var/www/html/web"
 
 EXPOSE 80
+
+# Health check required by Coolify — curl runs inside the container
+HEALTHCHECK --interval=10s --timeout=5s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost/ || exit 1
 
 # Copy our custom Caddyfile to FrankenPHP's expected location
 COPY frankenphp.Caddyfile /etc/frankenphp/Caddyfile
