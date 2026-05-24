@@ -16,17 +16,23 @@ COPY . .
 
 RUN composer dump-autoload --optimize --no-dev
 
-# ─── Stage 2: FrankenWP production image ─────────────────────────────────────
-# FrankenWP = FrankenPHP + Caddy + WordPress server cache built-in
-# https://github.com/StephenMiracle/frankenwp
-FROM wpeverywhere/frankenwp:latest
+# ─── Stage 2: FrankenPHP production image ────────────────────────────────────
+# Official FrankenPHP image — PHP + Caddy in one
+# https://frankenphp.dev
+FROM dunglas/frankenphp:latest
+
+WORKDIR /var/www/html
 
 # Install extra PHP extensions needed by Bedrock + s3-uploads
 RUN install-php-extensions \
+    pdo_mysql \
+    mysqli \
     redis \
+    gd \
     intl \
     exif \
-    zip
+    zip \
+    opcache
 
 # PHP runtime settings
 RUN { \
@@ -36,7 +42,7 @@ RUN { \
     echo 'max_execution_time=60'; \
 } > /usr/local/etc/php/conf.d/wordpress.ini
 
-# OPcache — keep aggressive in production, worker mode benefits from this
+# OPcache — aggressive in production, worker mode benefits from this
 RUN { \
     echo 'opcache.enable=1'; \
     echo 'opcache.memory_consumption=128'; \
@@ -47,12 +53,10 @@ RUN { \
 } > /usr/local/etc/php/conf.d/opcache.ini
 
 # Copy Bedrock app from deps stage
-# FrankenWP expects content in /var/www/html — we map Bedrock's web/ as docroot
 COPY --from=deps --chown=www-data:www-data /app /var/www/html
 
-# Tell Caddy/FrankenPHP that Bedrock's document root is web/
-# (overrides the default /var/www/html/wp)
-ENV DOCUMENT_ROOT=/var/www/html/web
+# Tell FrankenPHP that Bedrock's document root is web/
+ENV FRANKENPHP_CONFIG="worker ./web/index.php"
 ENV SERVER_NAME=":80"
 
 EXPOSE 80
