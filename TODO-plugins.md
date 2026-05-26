@@ -1,13 +1,18 @@
 # Plugin TODO
 
-Plugins to install when building out the site (via `composer require wpackagist-plugin/<slug>`):
+Installed (via Composer, on `coolio-wp-franken-v1.1`):
 
-- [ ] **Elementor** — `wpackagist-plugin/elementor` — page builder
-- [ ] **Starter Templates** — `wpackagist-plugin/astra-sites` — one-click Elementor starter sites
-- [ ] **SureForms** — `wpackagist-plugin/sureforms` — form builder
-- [ ] **SureRank** — `wpackagist-plugin/surerank` — SEO plugin
-- [ ] **Ultimate Addons for Elementor** — `wpackagist-plugin/ultimate-addons-for-elementor` — Elementor widget pack
-- [ ] **WPForms Lite** — `wpackagist-plugin/wpforms-lite` — alternative form builder
+- [x] **Astra** — `wpackagist-theme/astra`
+- [x] **Elementor** — `wpackagist-plugin/elementor`
+- [x] **Starter Templates** — `wpackagist-plugin/astra-sites`
+- [x] **SureForms** — `wpackagist-plugin/sureforms`
+- [x] **SureRank** — `wpackagist-plugin/surerank`
+- [x] **WPForms Lite** — `wpackagist-plugin/wpforms-lite`
+
+Still pending:
+
+- [ ] **Ultimate Addons for Elementor** (Brainstorm Force) — premium, not on
+      wpackagist. Needs a Composer endpoint or manual install. Skipped for now.
 
 > **Note:** WP Mail SMTP is probably not needed — outbound mail is handled by the
 > Coolify SMTP relay (postfix → Brevo). The mu-plugin in `web/app/mu-plugins/`

@@ -33,7 +33,13 @@
     "wpackagist-plugin/redis-cache": "^2.5",
     "wpackagist-plugin/autoptimize": "^3.1",
     "wpackagist-plugin/wp-fastest-cache": "^1.2",
-    "wpackagist-theme/twentytwentyfive": "^1.5"
+    "wpackagist-theme/twentytwentyfive": "^1.5",
+    "wpackagist-theme/astra": "^4.13",
+    "wpackagist-plugin/elementor": "^4.1",
+    "wpackagist-plugin/astra-sites": "^4.6",
+    "wpackagist-plugin/sureforms": "^2.9",
+    "wpackagist-plugin/surerank": "^1.7",
+    "wpackagist-plugin/wpforms-lite": "^1.10"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
