@@ -1,7 +1,9 @@
 {
 	auto_https off
 	admin off
-	frankenphp
+	frankenphp {
+		worker /var/www/html/web/wp/index.php 4
+	}
 }
 
 :80 {
