@@ -17,8 +17,18 @@ web/app/plugins/
 web/app/mu-plugins/*
 !web/app/mu-plugins/0*.php
 
-# Uploads — stored in Bunny.net, never committed
-web/app/uploads/
+# Composer-managed themes — never committed (matches plugins pattern).
+web/app/themes/*
+!web/app/themes/.gitkeep
+
+# Uploads — stored in Bunny.net + persisted via Coolify volume on prod.
+# Keep dir tracked so image has it owned by www-data (volume inherits perms).
+web/app/uploads/*
+!web/app/uploads/.gitkeep
+
+# WP upgrade temp dir — persisted via Coolify volume on prod.
+web/app/upgrade/*
+!web/app/upgrade/.gitkeep
 
 # OS
 .DS_Store
