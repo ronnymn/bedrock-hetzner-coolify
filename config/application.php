@@ -78,9 +78,18 @@ Config::define('ENFORCE_GZIP',        true);
 
 // ─── Security ────────────────────────────────────────────────────────────────
 Config::define('DISALLOW_FILE_EDIT',  true);
-Config::define('DISALLOW_FILE_MODS',  $is_production);
+Config::define(
+    'DISALLOW_FILE_MODS',
+    env('DISALLOW_FILE_MODS') !== null
+        ? filter_var(env('DISALLOW_FILE_MODS'), FILTER_VALIDATE_BOOLEAN)
+        : $is_production
+);
 Config::define('FORCE_SSL_ADMIN',     $is_production);
 Config::define('WP_AUTO_UPDATE_CORE', $is_development ? true : 'minor');
+
+// Use direct filesystem access — container's www-data owns the files,
+// so WP can write uploads/generated assets without prompting for FTP creds.
+Config::define('FS_METHOD', 'direct');
 
 // ─── Debug ───────────────────────────────────────────────────────────────────
 Config::define('WP_DEBUG',         !$is_production);
