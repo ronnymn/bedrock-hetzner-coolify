@@ -53,12 +53,17 @@ Config::define('LOGGED_IN_SALT',   env('LOGGED_IN_SALT'));
 Config::define('NONCE_SALT',       env('NONCE_SALT'));
 
 // ─── Bunny.net Object Storage (via S3 Uploads) ───────────────────────────────
-Config::define('S3_UPLOADS_BUCKET',     env('S3_UPLOADS_BUCKET'));
-Config::define('S3_UPLOADS_REGION',     env('S3_UPLOADS_REGION')   ?: 'eu-central-1');
-Config::define('S3_UPLOADS_KEY',        env('S3_UPLOADS_KEY'));
-Config::define('S3_UPLOADS_SECRET',     env('S3_UPLOADS_SECRET'));
-Config::define('S3_UPLOADS_ENDPOINT',   env('S3_UPLOADS_ENDPOINT') ?: 'https://storage.bunnycdn.com');
-Config::define('S3_UPLOADS_BUCKET_URL', env('S3_UPLOADS_BUCKET_URL'));
+// Only activate when all required credentials are present — humanmade/s3-uploads
+// checks `defined('S3_UPLOADS_BUCKET')` to decide whether to hook into uploads,
+// so leaving the constants undefined cleanly disables the plugin.
+if (env('S3_UPLOADS_BUCKET') && env('S3_UPLOADS_KEY') && env('S3_UPLOADS_SECRET')) {
+    Config::define('S3_UPLOADS_BUCKET',     env('S3_UPLOADS_BUCKET'));
+    Config::define('S3_UPLOADS_REGION',     env('S3_UPLOADS_REGION')   ?: 'eu-central-1');
+    Config::define('S3_UPLOADS_KEY',        env('S3_UPLOADS_KEY'));
+    Config::define('S3_UPLOADS_SECRET',     env('S3_UPLOADS_SECRET'));
+    Config::define('S3_UPLOADS_ENDPOINT',   env('S3_UPLOADS_ENDPOINT') ?: 'https://storage.bunnycdn.com');
+    Config::define('S3_UPLOADS_BUCKET_URL', env('S3_UPLOADS_BUCKET_URL'));
+}
 
 // ─── Redis Object Cache ──────────────────────────────────────────────────────
 if (env('REDIS_HOST')) {
