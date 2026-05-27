@@ -58,7 +58,7 @@ Config::define('NONCE_SALT',       env('NONCE_SALT'));
 // so leaving the constants undefined cleanly disables the plugin.
 if (env('S3_UPLOADS_BUCKET') && env('S3_UPLOADS_KEY') && env('S3_UPLOADS_SECRET')) {
     Config::define('S3_UPLOADS_BUCKET',     env('S3_UPLOADS_BUCKET'));
-    Config::define('S3_UPLOADS_REGION',     env('S3_UPLOADS_REGION')   ?: 'eu-central-1');
+    Config::define('S3_UPLOADS_REGION',     env('S3_UPLOADS_REGION')   ?: 'de');
     Config::define('S3_UPLOADS_KEY',        env('S3_UPLOADS_KEY'));
     Config::define('S3_UPLOADS_SECRET',     env('S3_UPLOADS_SECRET'));
     Config::define('S3_UPLOADS_ENDPOINT',   env('S3_UPLOADS_ENDPOINT') ?: 'https://storage.bunnycdn.com');
