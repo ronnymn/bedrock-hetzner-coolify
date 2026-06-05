@@ -106,6 +106,27 @@ Config::define('SCRIPT_DEBUG',     !$is_production);
 Config::define('WP_MEMORY_LIMIT',     '256M');
 Config::define('WP_MAX_MEMORY_LIMIT', '512M');
 
+// ─── Multisite (env-gated; no-op when WP_ALLOW_MULTISITE unset) ───────────────
+// Two-phase enable:
+//   Phase 1 — set WP_ALLOW_MULTISITE=true, deploy, run Network Setup in wp-admin.
+//   Phase 2 — add MULTISITE=true + DOMAIN_CURRENT_SITE, deploy.
+// This network is subdomain-only, so SUBDOMAIN_INSTALL is fixed true.
+if (filter_var(env('WP_ALLOW_MULTISITE'), FILTER_VALIDATE_BOOLEAN)) {
+    Config::define('WP_ALLOW_MULTISITE', true);
+
+    if (filter_var(env('MULTISITE'), FILTER_VALIDATE_BOOLEAN)) {
+        if (!env('DOMAIN_CURRENT_SITE')) {
+            throw new \RuntimeException('DOMAIN_CURRENT_SITE must be set when MULTISITE=true.');
+        }
+        Config::define('MULTISITE',            true);
+        Config::define('SUBDOMAIN_INSTALL',    true);
+        Config::define('DOMAIN_CURRENT_SITE',  env('DOMAIN_CURRENT_SITE'));
+        Config::define('PATH_CURRENT_SITE',    env('PATH_CURRENT_SITE') ?: '/');
+        Config::define('SITE_ID_CURRENT_SITE', (int) (env('SITE_ID_CURRENT_SITE') ?: 1));
+        Config::define('BLOG_ID_CURRENT_SITE', (int) (env('BLOG_ID_CURRENT_SITE') ?: 1));
+    }
+}
+
 Config::apply();
 
 if (!defined('ABSPATH')) {
