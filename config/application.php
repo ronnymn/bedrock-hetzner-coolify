@@ -115,6 +115,9 @@ if (filter_var(env('WP_ALLOW_MULTISITE'), FILTER_VALIDATE_BOOLEAN)) {
     Config::define('WP_ALLOW_MULTISITE', true);
 
     if (filter_var(env('MULTISITE'), FILTER_VALIDATE_BOOLEAN)) {
+        if (!env('DOMAIN_CURRENT_SITE')) {
+            throw new \RuntimeException('DOMAIN_CURRENT_SITE must be set when MULTISITE=true.');
+        }
         Config::define('MULTISITE',            true);
         Config::define('SUBDOMAIN_INSTALL',    true);
         Config::define('DOMAIN_CURRENT_SITE',  env('DOMAIN_CURRENT_SITE'));
